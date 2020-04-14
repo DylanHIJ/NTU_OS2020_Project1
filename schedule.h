@@ -4,6 +4,7 @@
 #define SJF  3
 #define PSJF 4
 
+
 void schedule_FIFO(Process *process, int num_process);
 
 void schedule_RR(Process *process, int num_process, int quantum);
