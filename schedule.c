@@ -83,7 +83,7 @@ void schedule_RR(Process *process, int num_process, int quantum){
             running = -1;
             cnt_finished ++;
             if(cnt_finished == num_process)
-                return;
+                break;
         }
 
         /* Check if any process is ready */
@@ -121,8 +121,8 @@ void schedule_RR(Process *process, int num_process, int quantum){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
+	    raise_priority(process[next].pid, 50);
             reduce_priority(process[running].pid);
-            raise_priority(process[next].pid, 50);
             running = next;
             last_start_time = elapsed_time;
             last_running = running;
@@ -150,7 +150,7 @@ void schedule_SJF(Process *process, int num_process){
             running = -1;
             cnt_finished ++;
             if(cnt_finished == num_process)
-                return;
+                break;
         }
 
         /* Check if any process is ready */
@@ -177,8 +177,8 @@ void schedule_SJF(Process *process, int num_process){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
+	    raise_priority(process[next].pid, 50);
             reduce_priority(process[running].pid);
-            raise_priority(process[next].pid, 50);
             running = next;
         }
 
@@ -204,7 +204,7 @@ void schedule_PSJF(Process *process, int num_process){
             running = -1;
             cnt_finished ++;
             if(cnt_finished == num_process)
-                return;
+                break;
         }
 
         /* Check if any process is ready */
@@ -227,8 +227,8 @@ void schedule_PSJF(Process *process, int num_process){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
+	    raise_priority(process[next].pid, 50);
             reduce_priority(process[running].pid);
-            raise_priority(process[next].pid, 50);
             running = next;
         }
 
