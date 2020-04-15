@@ -1,5 +1,5 @@
 main: main.o schedule.o process.o priority.o
-	gcc -Wall main.o schedule.o priority.o -o main
+	gcc -Wall main.o schedule.o process.o priority.o -o main
 
 schedule.o: schedule.c
 	gcc -Wall schedule.c -c

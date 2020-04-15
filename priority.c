@@ -1,10 +1,11 @@
+#include <stdio.h>
 #include <sched.h>
 #include <sys/types.h>
 
-int raise_priority(pid_t pid){
+int raise_priority(pid_t pid, int priority){
     /* Raise the priority of a process */ 
     struct sched_param param;
-    param.sched_priority = 80;
+    param.sched_priority = priority;
     if(sched_setscheduler(pid, SCHED_FIFO, &param) < 0){
         perror("sched_setscheduler");
         return -1;

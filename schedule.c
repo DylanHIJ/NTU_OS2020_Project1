@@ -6,6 +6,8 @@
 #include "process.h"
 #include "schedule.h"
 
+// static int cnt_finished;
+
 int proc_cmp(const void *p1, const void *p2){
     int p1_ready_time = ((Process *)p1)->ready_time;
     int p2_ready_time = ((Process *)p2)->ready_time;
@@ -17,7 +19,6 @@ void schedule_FIFO(Process *process, int num_process){
     int elapsed_time = 0;
     int running = -1;
     int cnt_finished = 0;
-    
     while(1){
         /* Check if the running process has finished execution */
         if(running != -1 && process[running].exec_time == 0){
@@ -25,7 +26,7 @@ void schedule_FIFO(Process *process, int num_process){
             running = -1;
             cnt_finished ++;
             if(cnt_finished == num_process)
-                return;
+                break;
         }
 
         /* Check if any process is ready */
@@ -44,18 +45,17 @@ void schedule_FIFO(Process *process, int num_process){
             for(int i = 0; i < num_process; i ++){
                 if(process[i].pid == -1 || process[i].exec_time == 0)
                     continue;
-                else{
+                else if(next == -1 || process[i].ready_time < process[next].ready_time)
                     next = i;
-                    break;
-                }
             }
         }
         
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
-            reduce_priority(process[next].pid);
-            raise_priority(process[next].pid);
+            //reduce_priority(process[running].pid);
+            raise_priority(process[next].pid, 50);
+	    reduce_priority(process[running].pid);
             running = next;
         }
 
@@ -121,8 +121,8 @@ void schedule_RR(Process *process, int num_process, int quantum){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
-            reduce_priority(process[next].pid);
-            raise_priority(process[next].pid);
+            reduce_priority(process[running].pid);
+            raise_priority(process[next].pid, 50);
             running = next;
             last_start_time = elapsed_time;
             last_running = running;
@@ -177,8 +177,8 @@ void schedule_SJF(Process *process, int num_process){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
-            reduce_priority(process[next].pid);
-            raise_priority(process[next].pid);
+            reduce_priority(process[running].pid);
+            raise_priority(process[next].pid, 50);
             running = next;
         }
 
@@ -227,8 +227,8 @@ void schedule_PSJF(Process *process, int num_process){
         /* Check if there is need for context switch */
         if(next != -1 && running != next){
             /* Context switch */
-            reduce_priority(process[next].pid);
-            raise_priority(process[next].pid);
+            reduce_priority(process[running].pid);
+            raise_priority(process[next].pid, 50);
             running = next;
         }
 
@@ -241,7 +241,7 @@ void schedule_PSJF(Process *process, int num_process){
     return;
 }
 void schedule(int policy_id, Process *process, int num_process){
-    qsort(process, num_process, sizeof(Process), proc_cmp);
+    //qsort(process, num_process, sizeof(Process), proc_cmp);
 
     /* -1 indicates that the process is not ready */
     for(int i = 0; i < num_process; i ++)
@@ -251,17 +251,22 @@ void schedule(int policy_id, Process *process, int num_process){
     assign_proc_to_cpu(getpid(), 0);
 
     /* Raise the priority of scheduler */
-    raise_priority(getpid());
+    raise_priority(getpid(), 40);
 
     /* Schedule with different scheduling policy */
     switch(policy_id){
         case FIFO:
             schedule_FIFO(process, num_process);
+	    break;
         case RR:
             schedule_RR(process, num_process, 500);
+	    break;
         case SJF:
             schedule_SJF(process, num_process);
+	    break;
         case PSJF:
             schedule_PSJF(process, num_process);
+	    break;
     }
+    return;
 }

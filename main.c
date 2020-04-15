@@ -33,5 +33,6 @@ int main(int argc, char const *argv[])
     }
 
     schedule(policy_id, process, num_process);
+    free(process);
     return 0;
 }
