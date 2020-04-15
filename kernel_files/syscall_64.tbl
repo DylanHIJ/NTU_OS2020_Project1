@@ -339,8 +339,8 @@
 330	common	pkey_alloc		sys_pkey_alloc
 331	common	pkey_free		sys_pkey_free
 332	common	statx			sys_statx
-333     common  my_printk               my_printk
-334     common  my_get_time             my_get_time           
+333     common  my_printk               sys_my_printk
+334     common  my_get_time             sys_my_get_time           
 
 #
 # x32-specific system call numbers start at 512 to avoid cache impact

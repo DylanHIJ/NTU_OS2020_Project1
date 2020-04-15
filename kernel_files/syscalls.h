@@ -941,6 +941,6 @@ asmlinkage long sys_pkey_free(int pkey);
 asmlinkage long sys_statx(int dfd, const char __user *path, unsigned flags,
 			  unsigned mask, struct statx __user *buffer);
 
-asmlinkage struct timespec my_get_time();
-asmlinkage void my_printk(char *str);
+asmlinkage long sys_my_get_time(void);
+asmlinkage void sys_my_printk(char *str);
 #endif

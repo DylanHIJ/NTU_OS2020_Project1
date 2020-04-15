@@ -1,6 +1,7 @@
 #include <linux/kernel.h>
 #include <linux/linkage.h>
 
-asmlinkage void my_printk(char *str){
-    printk("%s", str);
+asmlinkage void sys_my_printk(char *str){
+    printk(str);
+    return;
 }
